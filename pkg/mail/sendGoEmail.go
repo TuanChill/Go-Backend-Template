@@ -55,11 +55,6 @@ func SendGoEmail(email string, data models.EmailData) {
 	// Set the body with HTML content
 	m.SetBody("text/html", body.String())
 
-	// Embed the image
-	m.Embed("docs/assets/logo.png", gomail.SetHeader(map[string][]string{
-		"Content-ID": {"<logo>"},
-	}))
-
 	// Set up the SMTP connection
 	port, err := strconv.Atoi(global.Cfg.Gmail.Port)
 	if err != nil {
