@@ -169,7 +169,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build server image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./third_party/docker/go/Dockerfile
@@ -179,7 +179,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build cronjob image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./third_party/docker/go/Dockerfile-cron
@@ -189,7 +189,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build queue image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./third_party/docker/go/Dockerfile-queue
