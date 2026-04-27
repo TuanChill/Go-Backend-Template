@@ -4,7 +4,8 @@ type Config struct {
 	Server   ServerConfig
 	Database DatabaseConfig
 	Cache    CacheConfig
-	Gmail    GmailConfig
+	SES      SESConfig
+	S3       S3Config
 	Telegram TelegramConfig
 	RabbitMQ RabbitMQConfig
 	Cors     CorsConfig
@@ -36,12 +37,14 @@ type CacheConfig struct {
 	Port     string
 }
 
-type GmailConfig struct {
-	Host     string
-	Port     string
-	Password string
-	Service  string
-	Mail     string
+type SESConfig struct {
+	Region string
+	Sender string // verified sender address in SES
+}
+
+type S3Config struct {
+	Region string
+	Bucket string
 }
 
 type TelegramConfig struct {

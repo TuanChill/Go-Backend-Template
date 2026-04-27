@@ -1,31 +1,38 @@
 package helpers
 
 import (
-	"fmt"
+	"context"
 	"log"
-	"net/smtp"
 
 	"go_template/global"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/sesv2"
+	sestypes "github.com/aws/aws-sdk-go-v2/service/sesv2/types"
 )
 
-// SendEmail sends an email using the configured SMTP settings.
-func SendEmail(email string, data string) {
-	// Set up authentication information.
-	auth := smtp.PlainAuth(
-		"",
-		global.Cfg.Gmail.Mail, // Pass the email address as a string
-		global.Cfg.Gmail.Password,
-		global.Cfg.Gmail.Host,
-	)
+// SendEmail sends a plain-text email via AWS SES.
+func SendEmail(email string, body string) {
+	input := &sesv2.SendEmailInput{
+		FromEmailAddress: aws.String(global.Cfg.SES.Sender),
+		Destination: &sestypes.Destination{
+			ToAddresses: []string{email},
+		},
+		Content: &sestypes.EmailContent{
+			Simple: &sestypes.Message{
+				Subject: &sestypes.Content{
+					Data: aws.String("Notification"),
+				},
+				Body: &sestypes.Body{
+					Text: &sestypes.Content{
+						Data: aws.String(body),
+					},
+				},
+			},
+		},
+	}
 
-	to := []string{email}
-	msg := []byte("To: " + email + "\r\n" +
-		"Subject: Hello!\r\n" +
-		"\r\n" +
-		"This is content:\r\n" +
-		"Data: " + data + "\r\n")
-	err := smtp.SendMail(fmt.Sprintf("%s:%s", global.Cfg.Gmail.Host, global.Cfg.Gmail.Port), auth, "profile-forme.com", to, msg)
-	if err != nil {
-		log.Fatal(err)
+	if _, err := global.SES.SendEmail(context.Background(), input); err != nil {
+		log.Printf("SES send email error to %s: %v", email, err)
 	}
 }

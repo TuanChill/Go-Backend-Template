@@ -2,69 +2,51 @@ package pkg
 
 import (
 	"bytes"
+	"context"
 	"html/template"
 	"log"
-	"os"
-	"strconv"
 
 	"go_template/global"
 	"go_template/internal/models"
 
-	"github.com/go-gomail/gomail"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/sesv2"
+	sestypes "github.com/aws/aws-sdk-go-v2/service/sesv2/types"
 )
 
-// EmailData holds the data for the email template
-// SendGoEmail sends an email using the provided email address and email data.
-// It ensures that the templates directory exists and parses the HTML template from the string.
-// Then, it executes the template with the provided data and initializes the email message.
-// The sender, recipient, subject, and body of the email are set accordingly.
-// It also embeds an image and sets up the SMTP connection.
-// Finally, it sends the email using the SMTP connection.
 func SendGoEmail(email string, data models.EmailData) {
-	// Ensure the templates directory exists (if you still need to create any directories or files)
-	err := os.MkdirAll("templates", 0755)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Parse the HTML template from the string
 	tmpl, err := template.New("email").Parse(data.Template)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("SES email template parse error: %v", err)
+		return
 	}
 
-	// Execute the template with data
 	var body bytes.Buffer
-	err = tmpl.Execute(&body, data)
-	if err != nil {
-		log.Fatal(err)
+	if err = tmpl.Execute(&body, data); err != nil {
+		log.Printf("SES email template execute error: %v", err)
+		return
 	}
 
-	// Initialize the email message
-	m := gomail.NewMessage()
-
-	// Set the sender
-	m.SetHeader("From", global.Cfg.Gmail.Mail)
-
-	// Set the recipient
-	m.SetHeader("To", email)
-
-	// Set the subject
-	m.SetHeader("Subject", data.Title+"!")
-
-	// Set the body with HTML content
-	m.SetBody("text/html", body.String())
-
-	// Set up the SMTP connection
-	port, err := strconv.Atoi(global.Cfg.Gmail.Port)
-	if err != nil {
-		panic(err)
+	input := &sesv2.SendEmailInput{
+		FromEmailAddress: aws.String(global.Cfg.SES.Sender),
+		Destination: &sestypes.Destination{
+			ToAddresses: []string{email},
+		},
+		Content: &sestypes.EmailContent{
+			Simple: &sestypes.Message{
+				Subject: &sestypes.Content{
+					Data: aws.String(data.Title),
+				},
+				Body: &sestypes.Body{
+					Html: &sestypes.Content{
+						Data: aws.String(body.String()),
+					},
+				},
+			},
+		},
 	}
 
-	d := gomail.NewDialer(global.Cfg.Gmail.Host, port, global.Cfg.Gmail.Mail, global.Cfg.Gmail.Password)
-
-	// Send the email
-	if err := d.DialAndSend(m); err != nil {
-		panic(err)
+	if _, err = global.SES.SendEmail(context.Background(), input); err != nil {
+		log.Printf("SES send email error to %s: %v", email, err)
 	}
 }

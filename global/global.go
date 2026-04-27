@@ -10,6 +10,8 @@ import (
 	pkg "go_template/pkg/setting"
 
 	firebase "firebase.google.com/go"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/sesv2"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/redis/go-redis/v9"
 )
@@ -20,6 +22,8 @@ var (
 	Cache        *redis.Client
 	AdminSdk     *firebase.App
 	MessageQueue *amqp.Connection
+	SES          *sesv2.Client
+	S3           *s3.Client
 )
 
 func init() {
@@ -55,6 +59,20 @@ func init() {
 	MessageQueue, err = initialization.ConnectRabbitMQ(Cfg.RabbitMQ.URL)
 	if err != nil {
 		fmt.Printf("Error connecting to RabbitMq: %v\n", err)
+		panic(err)
+	}
+
+	//* SES
+	SES, err = initialization.ConnectSES(Cfg)
+	if err != nil {
+		fmt.Printf("Error connecting to AWS SES: %v\n", err)
+		panic(err)
+	}
+
+	//* S3
+	S3, err = initialization.ConnectS3(Cfg)
+	if err != nil {
+		fmt.Printf("Error connecting to AWS S3: %v\n", err)
 		panic(err)
 	}
 }
