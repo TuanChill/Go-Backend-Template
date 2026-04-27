@@ -298,36 +298,8 @@ make update-image
 └── tmp/
 ```
 
-# Tài liệu bằng tiếng Vietnamese 🇻🇳.
 
-- `.dockerignore`: Chứa danh sách các tệp và thư mục mà Docker sẽ bỏ qua khi xây dựng hình ảnh.
-- `.env`: Chứa các biến môi trường cho dự án.
-- `.env.example`: Một ví dụ về tệp `.env` chứa các biến môi trường cần thiết, dùng để hướng dẫn.
-- `.github/`: Chứa các tệp cấu hình cho GitHub, như `FUNDING.yml` để cấu hình tài trợ.
-- `.gitignore`: Chứa danh sách các tệp và thư mục mà git sẽ bỏ qua.
-- `.vscode/`: Chứa cấu hình cho Visual Studio Code, như `settings.json`.
-- `cmd/`: Chứa các điểm vào của ứng dụng như CLI, cronjob, hàng đợi, và máy chủ.
-- `configs/`: Chứa các tệp cấu hình cho ứng dụng, bao gồm cả cấu hình chung và cấu hình dưới dạng tệp YAML.
-- `docker-compose.dev.yml` và `docker-compose.pro.yml`: Chứa cấu hình Docker Compose cho môi trường phát triển và sản xuất.
-- `docs/`: Chứa tài liệu dự án, bao gồm cả mã hóa, bảng mã, Go, Postman và Swagger.
-- `fsnotify.go`: Tệp này có thể chứa mã để theo dõi các thay đổi tệp hệ thống.
-- `global/`: Chứa các biến toàn cục cho ứng dụng.
-- `go.mod` và `go.sum`: Quản lý các phụ thuộc của dự án Go.
-- `GUILD.md`: Có thể là hướng dẫn hoặc thông tin về cách tham gia và đóng góp cho dự án.
-- `internal/`: Chứa mã nguồn nội bộ của ứng dụng, không dành cho việc tái sử dụng bên ngoài.
-- `makefile`: Chứa các lệnh tự động hóa cho việc xây dựng và quản lý dự án.
-- `migrations/`: Chứa các tệp di cư cơ sở dữ liệu.
-- `pkg/`: Chứa các thư viện và gói có thể tái sử dụng bên ngoài dự án.
-- `README.md`: Tệp này chứa thông tin tổng quan và hướng dẫn cho dự án.
-- `response/`: Có thể chứa mã để xử lý và trả về các phản hồi HTTP.
-- `scripts/`: Chứa các kịch bản hỗ trợ cho việc phát triển và triển khai.
-- `sqlc.yaml`: Cấu hình cho sqlc, một công cụ tự động hóa việc viết mã từ SQL.
-- `templates/`: Chứa các mẫu cho giao diện người dùng hoặc tệp khác.
-- `tests/`: Chứa các bài kiểm tra tự động cho dự án.
-- `third_party/`: Chứa mã từ các dự án bên thứ ba.
-- `tmp/`: Thư mục tạm thời cho các tệp được tạo ra trong quá trình phát triển.
 
-# Document to language English 🏴󠁧󠁢󠁥󠁮󠁧󠁿
 
 - `.dockerignore`: Contains a list of files and directories that Docker should ignore when building an image.
 - `.env`: Contains environment variables for the project.
