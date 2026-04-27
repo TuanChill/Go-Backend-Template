@@ -88,6 +88,8 @@
     "socialService",
     "sqlc",
     "strconv",
+    "Itoa",
+    "AMQPS",
     "structs",
     "swaggo",
     "syscall",
