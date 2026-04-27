@@ -74,6 +74,34 @@ update-cron:
 update-image: update-server update-cron
 	@echo "Both server and cron images updated successfully."
 
+################# TODO: UAT DEPLOY #################
+UAT_HOST := 47.130.249.136
+UAT_KEY := ~/.ssh/uat-app-key.pem
+UAT_DIR := /opt/app
+
+deploy-uat:
+	@echo "Building for Linux amd64..."
+	GOOS=linux GOARCH=amd64 go build -o /tmp/uat-app ./cmd/server
+	@echo "Copying binary to UAT server..."
+	scp -i $(UAT_KEY) /tmp/uat-app ubuntu@$(UAT_HOST):$(UAT_DIR)/app
+	@echo "Restarting app on UAT..."
+	ssh -i $(UAT_KEY) ubuntu@$(UAT_HOST) "sudo kill -9 \$$(pgrep app) 2>/dev/null; cd $(UAT_DIR) && nohup sudo ./app > /tmp/app.log 2>&1 &"
+	@echo "Waiting for startup..."
+	@sleep 3
+	@echo "Testing endpoint..."
+	@curl -s http://$(UAT_HOST):8080/ping | head -1 || echo "FAILED - check logs: ssh -i $(UAT_KEY) ubuntu@$(UAT_HOST) 'tail /tmp/app.log'"
+	@echo ""
+	@echo "Done! App running at http://$(UAT_HOST):8080"
+
+deploy-uat-ssh:
+	ssh -i $(UAT_KEY) ubuntu@$(UAT_HOST)
+
+deploy-uat-logs:
+	ssh -i $(UAT_KEY) ubuntu@$(UAT_HOST) "tail -30 /tmp/app.log"
+
+deploy-uat-restart:
+	ssh -i $(UAT_KEY) ubuntu@$(UAT_HOST) "sudo kill -9 \$$(pgrep app) 2>/dev/null; cd $(UAT_DIR) && nohup sudo ./app > /tmp/app.log 2>&1 &"
+
 ################# TODO: DOCKER HUB #################
 # Build and tag the server image
 server-image-tag:
