@@ -73,8 +73,8 @@ Go_Secure_Auth_Pro/
 ### 1. Clone the Project
 
 ```bash
-git clone https://github.com/fdhhhdjd/Go_Secure_Auth_Pro.git
-cd Go_Secure_Auth_Pro
+git clone https://github.com/TuanChill/Go-Backend-Template-.git
+cd Go-Backend-Template-
 ```
 
 ### 2. Environment Configuration
@@ -222,26 +222,13 @@ make update-image
 - [Redis](https://redis.io/)
 - [RabbitMQ](https://www.rabbitmq.com/)
 
-## Description: This is a project built to language Go change for Nodejs with performance so well. The target when I write this project is to service the company system and check performance before going into the project.
+## Project Notes
 
-## Notice: If you have any problems, you can contact me or create an issue me to read and fix it, thank all guys.
-
-## Technology Stack:
-
-- **Backend**: Go + Gin
-- **Database**: PostgreSQL
-- **Lib**: Have a lot of libraries to service the project.
-- **Cache**: Redis
-
----
-
-## Description: This is a project about feature auth and security. It has been coding language go and will continue development with a new feature.
-
-## Note: We will have 2 kinds of languages, Vietnamese and English.
+This project focuses on authentication and security features for Go backend services. It is intended as a reusable backend template for production-oriented systems.
 
 <!-- go run gif -->
 <div align="center">
-  <a href="https://go.dev/"><img src="https://raw.githubusercontent.com/fdhhhdjd/fdhhhdjd/main/assets/go_run.gif"></a>
+  <a href="https://go.dev/"><img src="https://raw.githubusercontent.com/TuanChill/TuanChill/main/assets/go_run.gif"></a>
 </div>
 
 ---
